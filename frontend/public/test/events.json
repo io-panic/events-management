@@ -1,0 +1,34 @@
+[
+  {
+    "id": "4bba28f6-a330-48c9-8913-4f0e6b5d8233",
+    "name": "Event #1",
+    "description": "Event Description #1",
+    "date_start": "2022-01-31T13:03"
+  },
+  {
+    "id": "630a76bc-e602-4958-9700-5b556bc5dd1a",
+    "name": "Event #2",
+    "description": "Event Description #2",
+    "date_start": "2022-02-23T03:18"
+  },
+  {
+    "id": "68b4a01d-6cca-466a-9bfd-25af466e6091",
+    "name": "Event #3",
+    "description": "Event Description #3",
+    "date_start": "2023-01-01T23:00",
+    "date_end": "2023-01-02T03:00"
+  },
+  {
+    "id": "3c211250-f493-47e4-86ae-3f8defa43f1a",
+    "name": "Event #4",
+    "description": "Event Description #4",
+    "date_start": "2020-08-03T04:00"
+  },
+  {
+    "id": "34580b4c-f16e-480c-91ce-42e0466c2f2f",
+    "name": "Event #5",
+    "description": "Event Description #5",
+    "date_start": "2021-10-11T09:00",
+    "date_end": "2021-10-11T13:00"
+  }
+]

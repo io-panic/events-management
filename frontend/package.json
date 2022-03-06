@@ -1,0 +1,125 @@
+{
+  "name": "vuejs-vite-bootstrap",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint --ext .js,.vue --ignore-path ../.gitignore --fix-dry-run src",
+    "format": "prettier .  --write",
+    "test": "jest --silent=false"
+  },
+  "dependencies": {
+    "@vuelidate/core": "^2.0.0-alpha.34",
+    "@vuelidate/validators": "^2.0.0-alpha.26",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.7.2",
+    "vue": "^3.2.25",
+    "vue-i18n": "9.1.9",
+    "vue-router": "4.0.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@intlify/vite-plugin-vue-i18n": "3.3.0",
+    "@intlify/vue-i18n-loader": "^4.1.0",
+    "@vitejs/plugin-vue": "^2.2.0",
+    "babel-jest": "^27.5.1",
+    "babel-preset-vite": "^1.0.4",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-vue": "^8.4.1",
+    "jest": "^27.5.1",
+    "prettier": "2.5.1",
+    "sass": "^1.48.0",
+    "vite": "^2.7.10"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "browser": true,
+      "es6": true
+    },
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+      "parser": "@babel/eslint-parser",
+      "requireConfigFile": false,
+      "sourceType": "module",
+      "ecmaVersion": 2018,
+      "ecmaFeatures": {
+        "globalReturn": false,
+        "impliedStrict": false,
+        "jsx": false
+      }
+    },
+    "ignorePatterns": [
+      "**/plugins/ext/**/*.js"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:vue/vue3-recommended",
+      "prettier"
+    ],
+    "rules": {
+      "array-bracket-spacing": [
+        1
+      ],
+      "no-unused-vars": [
+        2,
+        {
+          "args": "none",
+          "varsIgnorePattern": "^_"
+        }
+      ],
+      "vue/component-tags-order": [
+        "error",
+        {
+          "order": [
+            "template",
+            "style",
+            "i18n",
+            "script"
+          ]
+        }
+      ]
+    },
+    "plugins": [
+      "vue"
+    ]
+  },
+  "prettier": {
+    "singleQuote": false,
+    "tabWidth": 2,
+    "printWidth": 120,
+    "bracketSpacing": true,
+    "bracketSameLine": true,
+    "trailingComma": "none",
+    "vueIndentScriptAndStyle": true
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      [
+        "babel-preset-vite",
+        {
+          "env": true,
+          "glob": false
+        }
+      ]
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  }
+}
