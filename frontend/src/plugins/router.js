@@ -1,18 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Main from "@/views/Main.vue";
-import Help from "@/views/Help.vue";
+import MainView from "@/views/MainView.vue";
+import HelpView from "@/views/HelpView.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Main",
-    component: Main
+    name: "MainView",
+    component: MainView
   },
   {
     path: "/help",
-    name: "Help",
-    component: Help
+    name: "HelpView",
+    component: HelpView
   }
 ];
 

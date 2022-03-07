@@ -130,6 +130,7 @@
 
   import { dataFunctions } from "@/plugins/data/data";
   import { Events } from "@/plugins/data/events";
+  import { UtilsFunctions } from "@/plugins/utils";
 
   export default {
     name: "EventCreate",
@@ -137,7 +138,7 @@
       formFields: {
         name: "",
         description: "",
-        date_start: new Date().toISOString().substring(0, 10) + " " + new Date().toISOString().substring(11, 16),
+        date_start: UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date())),
         date_end: null
       }
     }),
@@ -167,11 +168,16 @@
     },
     methods: {
       createButtonClicked() {
+        this.formFields.date_start = new Date(this.formFields.date_start).toISOString();
         dataFunctions.addEvent(new Events(this.formFields));
-      },
-      getFormattedDate() {
-        let currentDate = new Date().toISOString();
-        return "{0} {1}".format(currentDate.substring(0, 10), currentDate.substring(11, 16));
+
+        this.formFields.name = "";
+        this.formFields.description = "";
+        this.formFields.date_start = UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date()));
+        this.formFields.date_end = null;
+
+        this.v$.formFields.$touch();
+        this.v$.formFields.$reset();
       }
     }
   };

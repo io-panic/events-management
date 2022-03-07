@@ -5,14 +5,14 @@
         <div class="card-title main-card-title bg-primary text-start ps-2">{{ t("main_title") }}</div>
 
         <div class="row">
-          <div class="col-4 text-start">
+          <div class="col-3 text-start">
             <label class="fw-bolder">{{ t("main_select_operation") }}</label>
             <select v-model="selectedOperation" class="form-select form-select-sm">
               <option value="CREATE">{{ t("main_operation_create") }}</option>
               <option value="LIST">{{ t("main_operation_list") }}</option>
             </select>
           </div>
-          <div class="col-8">
+          <div class="col-9">
             <component :is="eventActiveOperation"></component>
           </div>
         </div>

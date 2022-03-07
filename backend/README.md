@@ -13,6 +13,10 @@ Use **automation** :
 > npm install @feathersjs/cli -g  
 > feathers generate app
 
+**Add a service** :
+
+> feathers generate service
+
 ### Jest
 
 > npm install --save-dev jest  
@@ -29,13 +33,13 @@ If not already executed :
 
 > npm install
 
-Then :
+Then (for development, auto reload) :
 
 > npm run dev
 
-Once ready to package :
+Or start server conventional wayn:
 
-> npm run build
+> npm start
 
 Files will be available in the 'dist' folder
 
