@@ -1,3 +1,5 @@
+import { ErrorCodes } from "@/plugins/constants";
+
 export class UtilsFunctions {
   static isDevelopmentEnvironment() {
     let currentEnvironment = import.meta.env.MODE;
@@ -20,6 +22,30 @@ export class UtilsFunctions {
 
       return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
     });
+  }
+
+  // @TODO this pattern is not strict enough
+  static isDateISO8601(dateString) {
+    return /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/i.test(dateString);
+  }
+
+  static getFormattedDate(stringDate) {
+    return "{0}T{1}".format(stringDate.substring(0, 10), stringDate.substring(11, 16));
+  }
+
+  static getLocalDate(dateValue) {
+    if (dateValue == null) {
+      return null;
+    }
+
+    if (!(dateValue instanceof Date)) {
+      throw ErrorCodes.DATE_START_IS_REQUIRED_DATE;
+    }
+
+    let offsetZone = dateValue.getTimezoneOffset() * 60 * 1000;
+    let localDateTime = dateValue - offsetZone;
+
+    return new Date(localDateTime).toISOString();
   }
 
   static async sleep(ms) {

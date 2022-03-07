@@ -1,36 +1,19 @@
-// Initializes the `todos` service on path `/todos`
-//const createService = require("feathers-nedb");
-//const createModel = require("../../models/todos.model");
-import hooks from "./events.hooks";
+// Initializes the `events` service on path `/events`
+const { Events } = require('./events.class');
+const createModel = require('../../models/events.model');
+const hooks = require('./events.hooks');
 
-export default async function (app) {
-  const Model = createModel(app);
-  const paginate = app.get("paginate");
-
+module.exports = function (app) {
   const options = {
-    Model,
-    paginate,
+    Model: createModel(app),
+    paginate: app.get('paginate')
   };
 
   // Initialize our service with any options it requires
-  app.use("/events", createService(options));
+  app.use('/events', new Events(options, app));
 
   // Get our initialized service so that we can register hooks
-  const service = app.service("events");
-
-  const todos = [
-    { title: "Learn vue", completed: true },
-    { title: "Learn vuex", completed: true },
-    { title: "Learn feathers", completed: true },
-    { title: "Learn feathers-vuex", completed: false },
-  ];
-
-  for (let todo of todos) {
-    const found = await service.find({ query: { title: todo.title } });
-    if (!found.total) {
-      service.create(todo);
-    }
-  }
+  const service = app.service('events');
 
   service.hooks(hooks);
-}
+};
