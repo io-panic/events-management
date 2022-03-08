@@ -8,6 +8,20 @@ This is a small project initialized to demonstrate featherjs functionnalities
 > npm install @feathersjs/feathers --save  
 > npm install @feathersjs/socketio @feathersjs/express --save
 
+[Use ES6 Syntax](https://santanusahoo.medium.com/feathersjs-with-es6-import-export-9bdad4a1f110)
+
+> npm install --save-dev @babel/core @babel/node @babel/preset-env cjs-to-es6
+
+## **TODO**
+
+Use alias for path (instead of relative)  
+[babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver)
+
+> npm install --save-dev babel-plugin-module-resolver  
+> npm install --save-dev eslint-plugin-import eslint-import-resolver-babel-module
+
+--- there is also a babel-plugin-root-import ---
+
 Use **automation** :
 
 > npm install @feathersjs/cli -g  
@@ -20,8 +34,7 @@ Use **automation** :
 ### Jest
 
 > npm install --save-dev jest  
-> npm install --save-dev babel-jest @babel/core @babel/preset-env  
-> npm install --save-dev babel-preset-vite
+> npm install --save-dev babel-jest @babel/core @babel/preset-env
 
 and then run tests using
 
@@ -41,9 +54,7 @@ Or start server conventional wayn:
 
 > npm start
 
-Files will be available in the 'dist' folder
-
 ### Linter | Prettier configuration ready to run
 
-> npm run lint
+> npm run lint  
 > npm run prettier

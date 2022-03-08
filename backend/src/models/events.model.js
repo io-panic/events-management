@@ -1,12 +1,12 @@
-const NeDB = require('@seald-io/nedb');
-const path = require('path');
+import NeDB from "@seald-io/nedb";
+import { join } from "path";
 
-module.exports = function (app) {
-  const dbPath = app.get('nedb');
+export default function (app) {
+  const dbPath = app.get("nedb");
   const Model = new NeDB({
-    filename: path.join(dbPath, 'events.db'),
-    autoload: true
+    filename: join(dbPath, "events.db"),
+    autoload: true,
   });
 
   return Model;
-};
+}
