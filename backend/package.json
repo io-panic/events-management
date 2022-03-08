@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "main": "src",
+  "type": "module",
   "keywords": [
     "feathers"
   ],
@@ -16,11 +17,12 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "test": "npm run lint && npm run jest",
-    "lint": "eslint src/. test/. --config .eslintrc.json --fix",
-    "dev": "nodemon src/",
-    "start": "node src/",
+    "cjstoes6": "cjs-to-es6 --verbose src",
+    "dev": "nodemon --exec npm start",
+    "start": "babel-node src/",
+    "lint": "eslint --ext .js --ignore-path .gitignore --fix",
     "clean": "shx rm -rf test/data/",
+    "test": "npm run lint && npm run jest",
     "jest": "npm run clean & SET NODE_ENV=test& jest --forceExit --detectOpenHandles"
   },
   "standard": {
@@ -44,10 +46,67 @@
     "winston": "^3.6.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
     "axios": "^0.26.0",
+    "babel-jest": "^27.5.1",
+    "cjs-to-es6": "^2.0.1",
     "eslint": "^8.10.0",
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "shx": "^0.3.4"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "browser": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "parser": "@babel/eslint-parser",
+      "requireConfigFile": false,
+      "sourceType": "module",
+      "ecmaVersion": 2018,
+      "ecmaFeatures": {
+        "globalReturn": false,
+        "impliedStrict": false,
+        "jsx": false
+      }
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
+    }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "esmodules": true,
+            "node": "current"
+          }
+        }
+      ]
+    ]
   }
 }

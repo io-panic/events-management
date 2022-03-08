@@ -1,3 +1,3 @@
-const { Service } = require('feathers-nedb');
+import { Service } from "feathers-nedb";
 
-exports.Events = class Events extends Service {};
+export class Events extends Service {}
