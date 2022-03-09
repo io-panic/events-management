@@ -1,5 +1,3 @@
-// Application hooks that run for every service
-
 export const before = {
   all: [],
   find: [],

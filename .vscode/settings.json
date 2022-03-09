@@ -8,7 +8,7 @@
   "files.autoSave": "onFocusChange",
   "terminal.integrated.defaultProfile.windows": "Command Prompt",
   "terminal.integrated.env.windows": {
-    "PATH": "D:\\Projects\\software\\nodejs;${env:PATH}"
+    "PATH": "C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\ProgramData\\DockerDesktop\\version-bin;D:\\Projects\\software\\nodejs;"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": true,

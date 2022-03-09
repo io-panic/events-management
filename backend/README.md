@@ -12,15 +12,13 @@ This is a small project initialized to demonstrate featherjs functionnalities
 
 > npm install --save-dev @babel/core @babel/node @babel/preset-env cjs-to-es6
 
-## **TODO**
+### Use alias for path (instead of relative)
 
-Use alias for path (instead of relative)  
-[babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver)
+[babel-plugin-root-import](https://github.com/entwicklerstube/babel-plugin-root-import)
 
-> npm install --save-dev babel-plugin-module-resolver  
-> npm install --save-dev eslint-plugin-import eslint-import-resolver-babel-module
+> npm install --save-dev babel-plugin-root-import
 
---- there is also a babel-plugin-root-import ---
+See options in package.json ("babel" | "plugins")
 
 Use **automation** :
 
