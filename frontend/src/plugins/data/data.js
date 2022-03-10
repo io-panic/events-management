@@ -2,7 +2,7 @@ import { Events } from "@/plugins/data/events";
 
 class DataFunctions {
   // @TODO put that in a config file or somewhere more obvious
-  #serviceUrl = "http://localhost:3030/events";
+  #serviceUrl = "http://localhost:1080/events";
   #events = null;
 
   retrieveEvents(callback_success) {
