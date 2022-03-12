@@ -9,7 +9,11 @@ export class Events {
   #date_end = null;
 
   constructor({ _id = UtilsFunctions.generateUUID(), name, description, date_start, date_end }) {
-    if (!UtilsFunctions.isDateISO8601(date_start)) {
+    if (date_start != null && !(date_start instanceof Date)) {
+      date_start = new Date(date_start).toISOString();
+    }
+
+    if (!UtilsFunctions.isStringDateISO8601(date_start)) {
       throw ErrorCodes.DATE_START_IS_REQUIRED_DATE;
     }
 

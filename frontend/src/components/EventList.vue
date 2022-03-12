@@ -1,26 +1,46 @@
 <template>
   <div class="row">
     <div class="col">
-      <div class="event-list-table-overflow">
-        <table class="table table-sm table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">{{ t("event_list_column_title_name") }}</th>
-              <th scope="col">{{ t("event_list_column_title_description") }}</th>
-              <th scope="col">{{ t("event_list_column_title_date_start") }}</th>
-              <th scope="col">{{ t("event_list_column_title_date_end") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="event in events" :key="event.id">
-              <td>{{ event.name }}</td>
-              <td>{{ event.description }}</td>
-              <td>{{ getLocalDate(new Date(event.dateStart)) }}</td>
-              <td>{{ getLocalDate(event.dateEnd == null ? null : new Date(event.dateEnd)) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <template v-if="loading">
+        <div class="text-success fw-bolder">
+          {{ t("event_list_loading_in_progress") }}
+        </div>
+      </template>
+
+      <template v-else>
+        <template v-if="resultAvailable.error">
+          <div class="text-danger fw-bolder">
+            <span>
+              {{ t("event_list_unable_to_load_data") }}
+              <br />
+              {{ resultAvailable.message }}
+            </span>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="event-list-table-overflow">
+            <table class="table table-sm table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">{{ t("event_list_column_title_name") }}</th>
+                  <th scope="col">{{ t("event_list_column_title_description") }}</th>
+                  <th scope="col">{{ t("event_list_column_title_date_start") }}</th>
+                  <th scope="col">{{ t("event_list_column_title_date_end") }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="event in events" :key="event.id">
+                  <td>{{ event.name }}</td>
+                  <td>{{ event.description }}</td>
+                  <td>{{ getLocalDate(new Date(event.dateStart)) }}</td>
+                  <td>{{ getLocalDate(event.dateEnd == null ? null : new Date(event.dateEnd)) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </template>
+      </template>
     </div>
   </div>
 </template>
@@ -28,7 +48,7 @@
 <style>
   .event-list-table-overflow {
     display: block;
-    height: 285px;
+    height: 259px;
     overflow-y: scroll;
   }
 </style>
@@ -36,12 +56,18 @@
 <i18n>
 {
   "en": {
+    "event_list_unable_to_load_data": "An error occured: cannot load data",
+    "event_list_timeout_error": "Cannot connect on backend: timeout",
+    "event_list_loading_in_progress": "Loading in progress...",
     "event_list_column_title_name": "Name",
     "event_list_column_title_description": "Description",
     "event_list_column_title_date_start": "Start on",
     "event_list_column_title_date_end": "End on",
   },
   "fr": {
+    "event_list_unable_to_load_data": "Une erreur est survenue: données non chargés",
+    "event_list_timeout_error": "Connexion au backend impossible: délai dépassé",
+    "event_list_loading_in_progress": "Chargement en cours...",
     "event_list_column_title_name": "Nom",
     "event_list_column_title_description": "Description",
     "event_list_column_title_date_start": "Débute le",
@@ -59,17 +85,35 @@
 
   export default {
     name: "EventCreate",
-    data: () => ({
-      events: [],
-      date_start: new Date(),
-      date_end: new Date()
-    }),
     setup() {
       const { t } = useI18n();
       return { t };
     },
+    data: () => ({
+      loading: true,
+      events: [],
+      resultAvailable: {
+        error: false,
+        message: ""
+      }
+    }),
     mounted() {
-      dataFunctions.retrieveEvents(this.generateTable);
+      this.loading = true;
+
+      dataFunctions
+        .retrieveEvents()
+        .then((result) => {
+          this.resultAvailable.error = false;
+          this.generateTable(result);
+
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.resultAvailable.error = true;
+          this.resultAvailable.message = "{0}: {1}".format(error.code, error.message);
+
+          this.loading = false;
+        });
     },
     methods: {
       getLocalDate(dateValue) {

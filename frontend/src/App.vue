@@ -36,7 +36,6 @@
 
   export default {
     name: "App",
-    data: (vm) => ({}),
     components: {
       LocaleSelector
     },
@@ -44,6 +43,7 @@
       const { t } = useI18n();
       return { t };
     },
+    data: (vm) => ({}),
     watch: {
       "$i18n.locale"(currentValue, previousValue) {
         document.title = this.t("app_title");

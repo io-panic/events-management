@@ -18,8 +18,7 @@ export default defineConfig({
       runtimeOnly: false,
       compositionOnly: true,
       defaultSFCLang: "json",
-      globalSFCScope: true,
-      useVueI18nImportName: false
+      globalSFCScope: true
     })
   ],
   resolve: {
