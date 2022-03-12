@@ -17,24 +17,24 @@
     "bootstrap-icons": "^1.7.2",
     "vue": "^3.2.25",
     "vue-i18n": "9.1.9",
-    "vue-router": "4.0.12"
+    "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "@intlify/vite-plugin-vue-i18n": "3.3.0",
+    "@intlify/vite-plugin-vue-i18n": "3.3.1",
     "@intlify/vue-i18n-loader": "^4.1.0",
-    "@vitejs/plugin-vue": "^2.2.0",
+    "@vitejs/plugin-vue": "^2.2.4",
     "babel-jest": "^27.5.1",
     "babel-preset-vite": "^1.0.4",
-    "eslint": "^8.9.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-vue": "^8.4.1",
     "jest": "^27.5.1",
     "prettier": "2.5.1",
     "sass": "^1.48.0",
-    "vite": "^2.7.10"
+    "vite": "^2.8.6"
   },
   "eslintConfig": {
     "env": {

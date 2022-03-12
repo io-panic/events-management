@@ -26,12 +26,7 @@
             type="text"
             :placeholder="t('event_create_field_placeholder_name')" />
 
-          <!-- @TODO Duplicate code! find a way to create a generic way or use something else -->
-          <template v-if="v$.formFields.name.$error">
-            <div v-for="error of v$.formFields.name.$errors" :key="error.$uid">
-              <div class="event-create-message-error">* {{ error.$message }}</div>
-            </div>
-          </template>
+          <FieldErrorMessage :errors="v$.formFields.name.$errors"></FieldErrorMessage>
         </div>
 
         <div class="form-group text-start mt-2">
@@ -46,12 +41,7 @@
             ]"
             :placeholder="t('event_create_field_placeholder_description')"></textarea>
 
-          <!-- @TODO Duplicate code! find a way to create a generic way or use something else -->
-          <template v-if="v$.formFields.description.$error">
-            <div v-for="error of v$.formFields.description.$errors" :key="error.$uid">
-              <div class="event-create-message-error">* {{ error.$message }}</div>
-            </div>
-          </template>
+          <FieldErrorMessage :errors="v$.formFields.description.$errors"></FieldErrorMessage>
         </div>
 
         <div class="row">
@@ -66,12 +56,7 @@
                   type="datetime-local" />
               </div>
 
-              <!-- @TODO Duplicate code! find a way to create a generic way or use something else -->
-              <template v-if="v$.formFields.date_start.$error">
-                <div v-for="error of v$.formFields.date_start.$errors" :key="error.$uid">
-                  <div class="event-create-message-error">* {{ error.$message }}</div>
-                </div>
-              </template>
+              <FieldErrorMessage :errors="v$.formFields.date_start.$errors"></FieldErrorMessage>
             </div>
           </div>
 
@@ -85,6 +70,8 @@
                   class="form-control form-control-sm"
                   type="datetime-local" />
               </div>
+
+              <FieldErrorMessage :errors="v$.formFields.date_end.$errors"></FieldErrorMessage>
             </div>
           </div>
         </div>
@@ -144,7 +131,9 @@
   import { useI18n } from "vue-i18n";
 
   import useVuelidate from "@vuelidate/core";
-  import { required, minLength, maxLength } from "@vuelidate/validators";
+  import { required, minLength, maxLength, minValue } from "@vuelidate/validators";
+
+  import FieldErrorMessage from "@/components/FieldErrorMessage.vue";
 
   import { dataFunctions } from "@/plugins/data/data";
   import { Events } from "@/plugins/data/events";
@@ -152,6 +141,7 @@
 
   export default {
     name: "EventCreate",
+    components: [FieldErrorMessage],
     setup() {
       const { t } = useI18n();
       const v$ = useVuelidate();
@@ -185,7 +175,9 @@
           date_start: {
             required
           },
-          date_end: {}
+          date_end: {
+            minValue: minValue(this.formFields.date_start)
+          }
         }
       };
     },
@@ -193,7 +185,6 @@
       createButtonClicked() {
         this.createInProgress = true;
         this.formState.error = false;
-
         dataFunctions
           .addEvent(new Events(this.formFields))
           .then((dataJson) => {
@@ -201,16 +192,13 @@
             this.formFields.description = "";
             this.formFields.date_start = UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date()));
             this.formFields.date_end = null;
-
             this.v$.formFields.$touch();
             this.v$.formFields.$reset();
-
             this.createInProgress = false;
           })
           .catch((error) => {
             this.formState.error = true;
             this.formState.message = "{0}: {1}".format(error.code, error.message);
-
             this.createInProgress = false;
           });
       }

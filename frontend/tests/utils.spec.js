@@ -29,8 +29,14 @@ describe("UtilsFunctions", () => {
   test("is Date String ISO8601 conform", () => {
     let dateString = new Date().toISOString();
 
-    expect(UtilsFunctions.isDateISO8601(dateString)).toBeTruthy();
-    expect(UtilsFunctions.isDateISO8601("...")).toBeFalsy();
-    // @TODO tests for more cases...
+    expect(UtilsFunctions.isStringDateISO8601(dateString)).toBeTruthy();
+    expect(UtilsFunctions.isStringDateISO8601("2022-03-12T22:53:59.821Z")).toBeTruthy();
+    expect(UtilsFunctions.isStringDateISO8601("2022-03-12T22:53:59.0821Z")).toBeTruthy();
+    expect(UtilsFunctions.isStringDateISO8601("2022-03-12T22:53:59.8908808Z")).toBeTruthy();
+    expect(UtilsFunctions.isStringDateISO8601("2022-03-12T22:53:59Z")).toBeTruthy();
+    expect(UtilsFunctions.isStringDateISO8601("2022-03-12T22:53:59U")).toBeFalsy();
+    expect(UtilsFunctions.isStringDateISO8601("2022-03-12T22:53:5Z")).toBeFalsy();
+    expect(UtilsFunctions.isStringDateISO8601("2020-12-01T11:00.001Z")).toBeFalsy();
+    expect(UtilsFunctions.isStringDateISO8601("...")).toBeFalsy();
   });
 });

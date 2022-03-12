@@ -51,7 +51,6 @@ export class UtilsFunctions {
     });
   }
 
-  // @TODO this pattern is not strict enough
   static isStringDateISO8601(dateString) {
     return /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/i.test(dateString);
   }
