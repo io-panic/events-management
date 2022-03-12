@@ -3,7 +3,7 @@
     <div class="d-inline-flex">
       <div class="fw-bolder">EN</div>
       <div class="p-0 mx-2 form-check form-switch">
-        <input class="mx-0 form-check-input" type="checkbox" v-model="isEnglishLanguageSelected" />
+        <input v-model="isEnglishLanguageSelected" class="mx-0 form-check-input" type="checkbox" />
       </div>
       <div class="fw-bolder">FR</div>
     </div>

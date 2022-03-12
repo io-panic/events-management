@@ -1,19 +1,24 @@
 <template>
   <div class="main-background" :style="backgroundImage">
-    <div class="card ma-3" style="opacity: 0.85; width: 850px; height: 350px">
+    <div class="card ma-3" style="opacity: 0.85; width: 875px; min-height: 350px">
       <div class="card-body">
         <div class="card-title main-card-title bg-primary text-start ps-2">{{ t("main_title") }}</div>
 
         <div class="row">
-          <div class="col-3 text-start">
+          <div class="col-12 col-sm-3 pb-3 text-start">
             <label class="fw-bolder">{{ t("main_select_operation") }}</label>
             <select v-model="selectedOperation" class="form-select form-select-sm">
               <option value="CREATE">{{ t("main_operation_create") }}</option>
               <option value="LIST">{{ t("main_operation_list") }}</option>
             </select>
           </div>
-          <div class="col-9">
-            <component :is="eventActiveOperation"></component>
+
+          <div class="col-12 col-sm-9">
+            <div class="card">
+              <div class="card-body">
+                <component :is="eventActiveOperation"></component>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -69,6 +74,10 @@
       EventCreate,
       EventList
     },
+    setup() {
+      const { t } = useI18n();
+      return { t };
+    },
     data: () => ({
       backgroundImage: "",
       selectedOperation: "CREATE",
@@ -78,10 +87,6 @@
       selectedOperation(currentValue, previousValue) {
         this.eventActiveOperation = currentValue === "CREATE" ? shallowRef(EventCreate) : shallowRef(EventList);
       }
-    },
-    setup() {
-      const { t } = useI18n();
-      return { t };
     },
     mounted() {
       let opacity = 0.8;

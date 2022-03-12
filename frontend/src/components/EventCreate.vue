@@ -1,13 +1,29 @@
 <template>
+  <template v-if="formState.error">
+    <div class="row">
+      <div class="col">
+        <div class="alert alert-danger alert-dismissible fade show fw-bolder" role="alert">
+          <span>
+            {{ t("event_create_error_occured") }}
+            <br />
+            {{ formState.message }}
+          </span>
+
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </template>
+
   <div class="row">
     <div class="col">
       <form ref="formEventCreate" @submit.prevent="onSubmit">
         <div class="form-group text-start">
           <label class="fw-bolder">{{ t("event_create_field_name") }}</label>
           <input
+            v-model="v$.formFields.name.$model"
             :class="['form-control', 'form-control-sm', v$.formFields.name.$error ? 'is-invalid' : '']"
             type="text"
-            v-model="v$.formFields.name.$model"
             :placeholder="t('event_create_field_placeholder_name')" />
 
           <!-- @TODO Duplicate code! find a way to create a generic way or use something else -->
@@ -21,13 +37,13 @@
         <div class="form-group text-start mt-2">
           <label class="fw-bolder">{{ t("event_create_field_description") }}</label>
           <textarea
+            v-model="v$.formFields.description.$model"
             :class="[
               'form-control',
               'form-control-sm',
               'main-textarea',
               v$.formFields.description.$error ? 'is-invalid' : ''
             ]"
-            v-model="v$.formFields.description.$model"
             :placeholder="t('event_create_field_placeholder_description')"></textarea>
 
           <!-- @TODO Duplicate code! find a way to create a generic way or use something else -->
@@ -45,9 +61,9 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
                 <input
+                  v-model="v$.formFields.date_start.$model"
                   :class="['form-control', 'form-control-sm', v$.formFields.date_start.$error ? 'is-invalid' : '']"
-                  type="datetime-local"
-                  v-model="v$.formFields.date_start.$model" />
+                  type="datetime-local" />
               </div>
 
               <!-- @TODO Duplicate code! find a way to create a generic way or use something else -->
@@ -65,9 +81,9 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
                 <input
+                  v-model="v$.formFields.date_end.$model"
                   class="form-control form-control-sm"
-                  type="datetime-local"
-                  v-model="v$.formFields.date_end.$model" />
+                  type="datetime-local" />
               </div>
             </div>
           </div>
@@ -79,10 +95,10 @@
   <div class="row">
     <div class="col text-end">
       <button
-        :disabled="v$.formFields.$invalid"
-        @click="createButtonClicked"
+        :disabled="v$.formFields.$invalid || createInProgress"
         type="button"
-        class="btn btn-primary btn-sm fw-bolder text-uppercase mt-2">
+        class="btn btn-primary btn-sm fw-bolder text-uppercase mt-2"
+        @click="createButtonClicked">
         {{ t("event_create_button_create") }}
       </button>
     </div>
@@ -108,7 +124,8 @@
     "event_create_field_date_end": "End on",
     "event_create_field_placeholder_name": "< enter an event name >",
     "event_create_field_placeholder_description": "< enter a description of the event >",
-    "event_create_button_create": "Create"
+    "event_create_button_create": "Create",
+    "event_create_error_occured": "Cannot create event: an error occured"
   },
   "fr": {
     "event_create_field_name": "Nom",
@@ -117,7 +134,8 @@
     "event_create_field_date_end": "Termine le",
     "event_create_field_placeholder_name": "< saisir un nom d'événement' >",
     "event_create_field_placeholder_description": "< indiquer une description de l'événement >",
-    "event_create_button_create": "Créer"
+    "event_create_button_create": "Créer",
+    "event_create_error_occured": "Création impossible: une erreur est survenue"
   }
 }
 </i18n>
@@ -134,19 +152,24 @@
 
   export default {
     name: "EventCreate",
-    data: () => ({
-      formFields: {
-        name: "",
-        description: "",
-        date_start: UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date())),
-        date_end: null
-      }
-    }),
     setup() {
       const { t } = useI18n();
       const v$ = useVuelidate();
       return { t, v$ };
     },
+    data: () => ({
+      formState: {
+        error: false,
+        message: ""
+      },
+      formFields: {
+        name: "",
+        description: "",
+        date_start: UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date())),
+        date_end: null
+      },
+      createInProgress: false
+    }),
     validations() {
       return {
         formFields: {
@@ -168,16 +191,28 @@
     },
     methods: {
       createButtonClicked() {
-        this.formFields.date_start = new Date(this.formFields.date_start).toISOString();
-        dataFunctions.addEvent(new Events(this.formFields));
+        this.createInProgress = true;
+        this.formState.error = false;
 
-        this.formFields.name = "";
-        this.formFields.description = "";
-        this.formFields.date_start = UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date()));
-        this.formFields.date_end = null;
+        dataFunctions
+          .addEvent(new Events(this.formFields))
+          .then((dataJson) => {
+            this.formFields.name = "";
+            this.formFields.description = "";
+            this.formFields.date_start = UtilsFunctions.getFormattedDate(UtilsFunctions.getLocalDate(new Date()));
+            this.formFields.date_end = null;
 
-        this.v$.formFields.$touch();
-        this.v$.formFields.$reset();
+            this.v$.formFields.$touch();
+            this.v$.formFields.$reset();
+
+            this.createInProgress = false;
+          })
+          .catch((error) => {
+            this.formState.error = true;
+            this.formState.message = "{0}: {1}".format(error.code, error.message);
+
+            this.createInProgress = false;
+          });
       }
     }
   };

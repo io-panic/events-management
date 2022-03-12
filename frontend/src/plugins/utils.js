@@ -24,8 +24,35 @@ export class UtilsFunctions {
     });
   }
 
+  static fetchJson({ url, options, timeoutAfterMs = 3000 }) {
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => controller.abort(), timeoutAfterMs);
+
+    options = options == null ? {} : options;
+    Object.assign(options, { signal: controller.signal });
+
+    return new Promise((resolve, reject) => {
+      fetch(url, options)
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            reject(new Error("HTTP error " + response.status));
+          }
+        })
+        .then((dataJson) => {
+          clearTimeout(timeoutId);
+          resolve(dataJson.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
+  }
+
   // @TODO this pattern is not strict enough
-  static isDateISO8601(dateString) {
+  static isStringDateISO8601(dateString) {
     return /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/i.test(dateString);
   }
 
