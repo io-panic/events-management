@@ -22,9 +22,11 @@
           <label class="fw-bolder">{{ t("event_create_field_name") }}</label>
           <input
             v-model="v$.formFields.name.$model"
-            :class="['form-control', 'form-control-sm', v$.formFields.name.$error ? 'is-invalid' : '']"
+            class="form-control form-control-sm"
+            :class="[{ 'is-invalid': v$.formFields.name.$error }]"
             type="text"
-            :placeholder="t('event_create_field_placeholder_name')" />
+            :placeholder="t('event_create_field_placeholder_name')"
+            autofocus />
 
           <FieldErrorMessage :errors="v$.formFields.name.$errors"></FieldErrorMessage>
         </div>
@@ -33,12 +35,8 @@
           <label class="fw-bolder">{{ t("event_create_field_description") }}</label>
           <textarea
             v-model="v$.formFields.description.$model"
-            :class="[
-              'form-control',
-              'form-control-sm',
-              'main-textarea',
-              v$.formFields.description.$error ? 'is-invalid' : ''
-            ]"
+            class="form-control form-control-sm main-textarea"
+            :class="[{ 'is-invalid': v$.formFields.description.$error }]"
             :placeholder="t('event_create_field_placeholder_description')"></textarea>
 
           <FieldErrorMessage :errors="v$.formFields.description.$errors"></FieldErrorMessage>
@@ -52,7 +50,8 @@
                 <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
                 <input
                   v-model="v$.formFields.date_start.$model"
-                  :class="['form-control', 'form-control-sm', v$.formFields.date_start.$error ? 'is-invalid' : '']"
+                  class="form-control form-control-sm"
+                  :class="[{ 'is-invalid': v$.formFields.date_start.$error }]"
                   type="datetime-local" />
               </div>
 
@@ -68,6 +67,7 @@
                 <input
                   v-model="v$.formFields.date_end.$model"
                   class="form-control form-control-sm"
+                  :class="[{ 'is-invalid': v$.formFields.date_end.$error }]"
                   type="datetime-local" />
               </div>
 
@@ -141,7 +141,7 @@
 
   export default {
     name: "EventCreate",
-    components: [FieldErrorMessage],
+    components: { FieldErrorMessage },
     setup() {
       const { t } = useI18n();
       const v$ = useVuelidate();
