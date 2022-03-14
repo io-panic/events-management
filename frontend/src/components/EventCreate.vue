@@ -131,13 +131,35 @@
   import { useI18n } from "vue-i18n";
 
   import useVuelidate from "@vuelidate/core";
-  import { required, minLength, maxLength, minValue } from "@vuelidate/validators";
+  import { required, minLength, maxLength, minValue, helpers } from "@vuelidate/validators";
 
   import FieldErrorMessage from "@/components/FieldErrorMessage.vue";
 
   import { dataFunctions } from "@/plugins/data/data";
   import { Events } from "@/plugins/data/events";
   import { UtilsFunctions } from "@/plugins/utils";
+
+  const isNameAlreadyExists = helpers.withMessage(
+    ({ $pending }) => {
+      if (!$pending) return "Field value already exists";
+      return "";
+    },
+
+    helpers.withAsync(async (value) => {
+      if (value == null) return true;
+
+      return await new Promise((resolve, reject) => {
+        dataFunctions
+          .getEventsWithName(value)
+          .then((result) => {
+            resolve(result.length < 1);
+          })
+          .catch((error) => {
+            reject(false);
+          });
+      });
+    })
+  );
 
   export default {
     name: "EventCreate",
@@ -166,7 +188,8 @@
           name: {
             required,
             min: minLength(4),
-            max: maxLength(32)
+            max: maxLength(32),
+            isUnique: isNameAlreadyExists
           },
           description: {
             required,

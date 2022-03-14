@@ -18,6 +18,22 @@ export class DataFunctions {
     });
   }
 
+  getEventsWithName(name) {
+    return new Promise((resolve, reject) => {
+      let urlWithParams = new URL(this.getServiceUrl());
+      urlWithParams.searchParams.append("name", encodeURI(name));
+
+      UtilsFunctions.fetchJson({ url: urlWithParams })
+        .then((dataJson) => {
+          this.#events = Events.convertArrayOfDictToArrayOfObjects(dataJson);
+          resolve(this.#events);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   addEvent(event) {
     // @TODO error management ... (per field, message, ...: details received from server...)
     const requestOptions = {
@@ -28,6 +44,23 @@ export class DataFunctions {
 
     return new Promise((resolve, reject) => {
       UtilsFunctions.fetchJson({ url: this.getServiceUrl(), options: requestOptions })
+        .then((dataJson) => {
+          resolve(dataJson);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  deleteEvent(id) {
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    };
+
+    return new Promise((resolve, reject) => {
+      UtilsFunctions.fetchJson({ url: "{0}/{1}".format(this.getServiceUrl(), id), options: requestOptions })
         .then((dataJson) => {
           resolve(dataJson);
         })

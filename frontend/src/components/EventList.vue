@@ -27,6 +27,7 @@
                   <th scope="col">{{ t("event_list_column_title_description") }}</th>
                   <th scope="col">{{ t("event_list_column_title_date_start") }}</th>
                   <th scope="col">{{ t("event_list_column_title_date_end") }}</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -35,6 +36,11 @@
                   <td>{{ event.description }}</td>
                   <td>{{ getLocalDate(new Date(event.dateStart)) }}</td>
                   <td>{{ getLocalDate(event.dateEnd == null ? null : new Date(event.dateEnd)) }}</td>
+                  <td>
+                    <button type="button" class="btn btn-sm event-list-force-pa-0" @click="deleteEvent(event.id)">
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -46,6 +52,10 @@
 </template>
 
 <style>
+  .event-list-force-pa-0 {
+    padding: 0 !important;
+  }
+
   .event-list-table-overflow {
     display: block;
     height: 259px;
@@ -121,6 +131,19 @@
       },
       generateTable(events) {
         this.events = shallowRef(events);
+      },
+      deleteEvent(id) {
+        dataFunctions
+          .deleteEvent(id)
+          .then((dataJson) => {
+            this.events = this.events.filter(function (event) {
+              return event.id !== id;
+            });
+          })
+          .catch((error) => {
+            this.resultAvailable.error = true;
+            this.resultAvailable.message = "{0}: {1}".format(error.code, error.message);
+          });
       }
     }
   };

@@ -1,6 +1,6 @@
 <template>
   <div class="main-background" :style="backgroundImage">
-    <div class="card ma-3" style="opacity: 0.85; width: 875px; min-height: 350px">
+    <div class="card ma-3" style="opacity: 0.85; width: 975px; min-height: 350px">
       <div class="card-body">
         <div class="card-title main-card-title bg-primary text-start ps-2">{{ t("main_title") }}</div>
 
