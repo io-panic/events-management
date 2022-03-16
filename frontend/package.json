@@ -8,7 +8,8 @@
     "preview": "vite build && vite preview",
     "lint": "eslint --ext .js,.vue --ignore-path ../.gitignore --fix src",
     "format": "prettier . --write",
-    "test": "jest --silent=false"
+    "test": "jest --silent=false",
+    "test:watch": "jest --watchAll"
   },
   "dependencies": {
     "@vuelidate/core": "^2.0.0-alpha.34",
@@ -118,8 +119,12 @@
     ]
   },
   "jest": {
+    "verbose": true,
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "babel-jest"
     }
   }
 }

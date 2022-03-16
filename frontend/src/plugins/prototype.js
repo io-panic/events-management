@@ -1,11 +1,24 @@
 class PrototypeFunctions {
+  EXCEPTION_ARGUMENT_INDEX_NOT_FOUND = "Argument index cannot be found: ";
+
   addFormatFunctionToStringObject() {
+    const vm = this;
+
     String.prototype.format = function () {
-      let a = this;
-      for (let k in arguments) {
-        a = a.replace("{" + k + "}", arguments[k]);
-      }
-      return a;
+      let stringToFormat = this;
+
+      Object.keys(arguments).forEach((index) => {
+        let value = arguments[index] == null ? "" : arguments[index];
+
+        let replaceString = "{" + index + "}";
+        if (stringToFormat.indexOf(replaceString) >= 0) {
+          stringToFormat = stringToFormat.replace(replaceString, value);
+        } else {
+          throw vm.EXCEPTION_ARGUMENT_INDEX_NOT_FOUND + "(" + index + ")";
+        }
+      });
+
+      return stringToFormat;
     };
   }
 
