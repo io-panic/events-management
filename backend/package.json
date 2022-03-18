@@ -23,7 +23,7 @@
     "lint": "eslint --ext .js --ignore-path .gitignore --fix",
     "clean": "shx rm -rf test/data/",
     "test": "npm run lint && npm run jest",
-    "jest": "npm run clean & SET NODE_ENV=test& jest --forceExit --detectOpenHandles"
+    "jest": "npm run clean & SET NODE_ENV=test& jest --silent false --forceExit --detectOpenHandles"
   },
   "standard": {
     "env": [
@@ -119,5 +119,15 @@
         }
       ]
     ]
+  },
+  "jest": {
+    "verbose": true,
+    "silent": false,
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   }
 }

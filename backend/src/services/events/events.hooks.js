@@ -1,9 +1,11 @@
 import feathersError from "@feathersjs/errors";
 
-const NAME_LENGTH_MIN = 4;
-const NAME_LENGTH_MAX = 32;
-const DESCRIPTION_LENGTH_MIN = 1;
-const DESCRIPTION_LENGTH_MAX = 2048;
+export class EVENTS_FIELD_CONSTRAINTS {
+  static NAME_LENGTH_MIN = 4;
+  static NAME_LENGTH_MAX = 32;
+  static DESCRIPTION_LENGTH_MIN = 1;
+  static DESCRIPTION_LENGTH_MAX = 2048;
+}
 
 const setTimestamp = (name) => {
   return async (context) => {
@@ -35,10 +37,30 @@ const isMatchISO8601 = (name) => {
 const fieldLengthMatch = (name, min, max) => {
   return async (context) => {
     let value = (context.data[name] || "").trim();
-    if (value.length < min || value.length > max) {
+    if (value.length < min || value.length >= max) {
       throw new feathersError.BadRequest("Length doesn't match", {
         errors: { [name]: "Length must be between " + min + " and " + max },
       });
+    }
+
+    return context;
+  };
+};
+
+const isDateEndBeforeDateStart = () => {
+  return async (context) => {
+    let dateStart = (context.data["date_start"] || "").trim();
+    let dateEnd = (context.data["date_end"] || "").trim();
+
+    if (dateEnd != "" && dateEnd < dateStart) {
+      throw new feathersError.BadRequest(
+        "End date value is before start date",
+        {
+          errors: {
+            ["date_end"]: "End date must be after start date " + dateStart,
+          },
+        }
+      );
     }
 
     return context;
@@ -53,12 +75,17 @@ export const before = {
     setTimestamp("createdAt"),
     isMatchISO8601("date_start"),
     isMatchISO8601("date_end"),
-    fieldLengthMatch("name", NAME_LENGTH_MIN, NAME_LENGTH_MAX),
+    fieldLengthMatch(
+      "name",
+      EVENTS_FIELD_CONSTRAINTS.NAME_LENGTH_MIN,
+      EVENTS_FIELD_CONSTRAINTS.NAME_LENGTH_MAX
+    ),
     fieldLengthMatch(
       "description",
-      DESCRIPTION_LENGTH_MIN,
-      DESCRIPTION_LENGTH_MAX
+      EVENTS_FIELD_CONSTRAINTS.DESCRIPTION_LENGTH_MIN,
+      EVENTS_FIELD_CONSTRAINTS.DESCRIPTION_LENGTH_MAX
     ),
+    isDateEndBeforeDateStart(),
   ],
   update: [setTimestamp("updatedAt")],
   patch: [],
