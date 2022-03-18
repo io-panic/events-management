@@ -199,7 +199,12 @@
             required
           },
           date_end: {
-            minValue: minValue(this.formFields.date_start)
+            minDate: helpers.withMessage(
+              "End date cannot be set before start date ({0})".format(this.formFields.date_start),
+              (currentValue) => {
+                return new Date(currentValue) > new Date(this.formFields.date_start);
+              }
+            )
           }
         }
       };
